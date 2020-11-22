@@ -2,10 +2,10 @@ const dogNav = document.querySelector("#dog-bar")
 const dogInfo = document.querySelector("#dog-info")
 const dogButton = document.querySelector("#Dog-Button")
 const navButton = document.querySelector("button#good-dog-filter")
+const dogNav1 = document.querySelectorAll("span")
 dogInfo.addEventListener("click",updateDog)
 dogNav.addEventListener("click", renderDog)
 navButton.addEventListener("click",renderGoodDog)
-let dogStatus = "Good Dog!"
 
 
 const initialize = () => {
@@ -31,7 +31,7 @@ function addDogNav(dogObj){
 // dogNav.addEventListener("click", renderDog)
 
 function renderGoodDog(e){
-    if(navButton.textContent == ``"Filter good dogs: OFF"){
+    if(navButton.textContent == "Filter good dogs: OFF"){
     fetch(`http://localhost:3000/pups`)
     .then(resp=> resp.json())
     .then(data => {
@@ -57,12 +57,13 @@ function renderGoodDog(e){
 
 function goodDogs(dogObj){
     
-    if(dogObj.isGoodDog == true){
+    if(dogObj.isGoodDog){
         addDogNav(dogObj)
     }
 }
 
 function renderDog(e){
+    if(e.target.matches("span")){
     const dogId = e.target.dataset.id
 
     fetch(`http://localhost:3000/pups/${dogId}`)
@@ -70,10 +71,12 @@ function renderDog(e){
     .then(data =>{
         appendDog(data)
     })
-
+    }
 }
 
 function appendDog(dogObj){
+    let dogStatus = "Good Dog!"
+
     if(dogObj.isGoodDog == false){
         dogStatus = "Bad Dog"
     }
@@ -103,7 +106,7 @@ function updateDog(e){
     })
     .then( resp => resp.json())
     .then(data =>{
-        debugger
+        
         renderDog(data)
     })
 
